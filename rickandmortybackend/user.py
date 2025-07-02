@@ -6,10 +6,16 @@ import hashlib
 import json
 import datetime
 import secrets
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Log in endpoint
 @csrf_exempt
 def login(request):
+    print(os.getenv("DB_HOST"))
     try:
         data = json.loads(request.body)
         username = data['userData']['username']
@@ -30,10 +36,10 @@ def login(request):
         # Get the hexadecimal digest
         encrypted_password = sha3_256_hasher.hexdigest()
         conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="1234",
-            database="rickandmorty"
+            host=os.getenv("DB_HOST"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            database=os.getenv("DB_DATABASE")
         )
 
         # Checking to see if the username and password are correct 
@@ -99,10 +105,10 @@ def logout(request):
             client_ip = request.META.get('REMOTE_ADDR')
 
             conn = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="1234",
-                database="rickandmorty"
+                host=os.getenv("DB_HOST"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+                database=os.getenv("DB_DATABASE")
             )
             now = datetime.datetime.now()
             cursor = conn.cursor()  
@@ -147,10 +153,10 @@ def register(request):
             encrypted_password = sha3_256_hasher.hexdigest()
 
             conn = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="1234",
-                database="rickandmorty"
+                host=os.getenv("DB_HOST"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+                database=os.getenv("DB_DATABASE")
             )
 
             # Registering and adding the registration details to the mysql user table
@@ -194,10 +200,10 @@ def register(request):
 def details(request):
     data = request.META.get('HTTP_USERNAME')
     conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="1234",
-        database="rickandmorty"
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_DATABASE")
     )
     cursor = conn.cursor()
     cursor.execute(
@@ -218,10 +224,10 @@ def update_profile(request):
             email = data['email']
 
             conn = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="1234",
-                database="rickandmorty"
+                host=os.getenv("DB_HOST"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+                database=os.getenv("DB_DATABASE")
             )
 
             # Registering and adding the registration details to the mysql user table
@@ -269,10 +275,10 @@ def update_password(request):
             encrypted_password = sha3_256_hasher.hexdigest()
 
             conn = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="1234",
-                database="rickandmorty"
+                host=os.getenv("DB_HOST"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+                database=os.getenv("DB_DATABASE")
             )
 
             # Registering and adding the registration details to the mysql user table

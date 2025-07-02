@@ -6,6 +6,11 @@ import hashlib
 import json
 import datetime
 import secrets
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Update the database table with the users and their favourites
 @csrf_exempt
@@ -16,10 +21,10 @@ def update_favourites(request):
             username = data['userData']['username']             
             character_id = data['character_id']
             conn = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="1234",
-                database="rickandmorty"
+                host=os.getenv("DB_HOST"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+                database=os.getenv("DB_DATABASE")
             )
 
             # Inserting the user and their character_id favourite into the userfavourites table
@@ -44,10 +49,10 @@ def fetch_favourites(request):
     try:
         username = request.META.get('HTTP_USERDATA')
         conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="1234",
-            database="rickandmorty"
+            host=os.getenv("DB_HOST"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            database=os.getenv("DB_DATABASE")
         )
 
         # Getting the favourites based ono character_id
@@ -78,10 +83,10 @@ def remove_favourites(request):
             username = data['userData']['username']
             character_id = data['character_id']
             conn = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="1234",
-                database="rickandmorty"
+                host=os.getenv("DB_HOST"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+                database=os.getenv("DB_DATABASE")
             )
             cursor = conn.cursor()
             print(username, character_id)
