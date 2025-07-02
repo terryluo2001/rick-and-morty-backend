@@ -107,16 +107,17 @@ def logout(request):
             now = datetime.datetime.now()
             cursor = conn.cursor()  
 
-            # Updating the login history to add the logout time
+
+            # Updating the login history to add the logout time, removing the speech marks from the session_id
             cursor.execute("""
-                UPDATE loginhistory SET logout_time = %s WHERE session_id = %s
-            """, (now, session_id))
+                UPDATE loginhistory SET logout_time = %s WHERE session_id = %s;
+            """, (now, session_id[1:-1]))
             conn.commit()
             return JsonResponse({'message': "logout okay"})
 
         except mysql.connector.Error as err:
             return JsonResponse({'error': err}, status=500)
-        finally:
+        finally:                    
             cursor.close()
             conn.close()
         return JsonResponse({'error': 'Only POST method allowed'}, status=405)

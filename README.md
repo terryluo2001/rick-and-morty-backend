@@ -2,7 +2,7 @@
 
 Welcome to the backend of the ricky-and-morty application hosted using Django on Python.
 
-1. In order to run the backend, type in the terminal:
+1. In order to run the backend, type in the terminal in the root folder:
 
 python manage.py runserver
 
