@@ -21,6 +21,8 @@ def update_favourites(request):
                 password="1234",
                 database="rickandmorty"
             )
+
+            # Inserting the user and their character_id favourite into the userfavourites table
             cursor = conn.cursor()
             cursor.execute("""
                 INSERT INTO userfavourites (username, character_id)
@@ -38,7 +40,6 @@ def update_favourites(request):
     return JsonResponse({'error': 'Only POST method allowed'}, status=405)
 
 # Fetch the favourites of the users
-@csrf_exempt
 def fetch_favourites(request):
     try:
         username = request.META.get('HTTP_USERDATA')
@@ -48,6 +49,8 @@ def fetch_favourites(request):
             password="1234",
             database="rickandmorty"
         )
+
+        # Getting the favourites based ono character_id
         cursor = conn.cursor()
         cursor.execute("""
             SELECT character_id FROM userfavourites WHERE username = %s;""",
@@ -56,6 +59,7 @@ def fetch_favourites(request):
         rows = cursor.fetchall()
         fav_id = []
         for row in rows:
+            print(row)
             fav_id.append(row[0])
         return JsonResponse({'favourites': fav_id})
     except mysql.connector.Error as err:
@@ -81,6 +85,8 @@ def remove_favourites(request):
             )
             cursor = conn.cursor()
             print(username, character_id)
+
+            # Removing the favourites from the mysql table based on the username
             cursor.execute("""
                 DELETE FROM userfavourites WHERE username = %s and character_id = %s;""",
                 (username, character_id)

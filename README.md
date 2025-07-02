@@ -4,7 +4,7 @@ Welcome to the backend of the ricky-and-morty application hosted using Django on
 
 1. In order to run the backend, type in the terminal in the root folder:
 
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 
 2. The backend files created are user.py and favourites.py in order to perform the functionalities of the application. 
 

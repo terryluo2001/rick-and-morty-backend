@@ -161,6 +161,7 @@ def register(request):
             )
 
             user_id = cursor.lastrowid
+
             # or
             now = datetime.datetime.now()  # for DATETIME column
             
@@ -173,8 +174,17 @@ def register(request):
             return JsonResponse({'message': 'User registered successfully'})
 
         except mysql.connector.Error as err:
-            return JsonResponse({'error': str(err)}, status=500)
-        finally:
+            errors = {}
+            if err.errno == 1062:
+                # Duplicate entry — check which field is duplicated
+                if "user.login" in str(err):
+                    errors['username'] = 'Username already exists'
+                if "user.email" in str(err):
+                    errors['email'] = 'Email already exists'
+                if errors:
+                    return JsonResponse({'errors': errors}, status=400)
+            return JsonResponse({'error': err.msg}, status=500)   
+        finally: 
             cursor.close()
             conn.close()
 
@@ -196,7 +206,7 @@ def details(request):
     result = cursor.fetchone()
     return JsonResponse({'message': result})
 
-# Set details
+# Set account details
 @csrf_exempt
 def update_profile(request):
     if request.method == 'POST':
@@ -225,14 +235,20 @@ def update_profile(request):
             conn.commit()
             return JsonResponse({'message': 'Updated profile successfully'})
         except mysql.connector.Error as err:
-            return JsonResponse({'error': str(err)}, status=500)
+            errors = {}
+            if err.errno == 1062:
+                if "user.email" in str(err):
+                    errors['email'] = 'Email already exists'
+                if errors:
+                    return JsonResponse({'errors': errors}, status=400)
+            return JsonResponse({'error': err.msg}, status=500)   
         finally:
             cursor.close()
             conn.close()
 
     return JsonResponse({'error': 'Only POST method allowed'}, status=405)
 
-# Set details
+# Updating the password in account profile page
 @csrf_exempt
 def update_password(request):
     if request.method == 'POST':
