@@ -12,7 +12,7 @@ python manage.py runserver 0.0.0.0:8000
 to the MySQL databases using my own host, user and password stored in the .env file. In order to be able to run the MySQL database on your local machine, please feel free to change the environment variables.
 
 4. The database schema called rickandmorty contain the tables loginhistory, user, userfavourites and userpassword. I will attach 
-a copy of a backup database which you should be able to restore on your MySQL server in order to run the backend properly.
+a copy of an SQL script which you should be able to run to create the empty tables on your SQL in order to run the backend properly.
 
 The SQL scripts to create the MySQL tables mentioned are:
 
@@ -50,7 +50,7 @@ CREATE TABLE `userfavourites` (
     `character_id` int DEFAULT NULL
 ) 
 
-#
+# Creating userpassword to store the users, their passwords and when they last updated their password
 CREATE TABLE `userpassword` (
     `user_id` int DEFAULT NULL,
     `password_encrypted` varchar(64) DEFAULT NULL,
