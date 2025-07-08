@@ -78,8 +78,7 @@ def fetch_favourites(request):
 def remove_favourites(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)        
-            print(data) 
+            data = json.loads(request.body)      
             username = data['userData']['username']
             character_id = data['character_id']
             conn = mysql.connector.connect(
